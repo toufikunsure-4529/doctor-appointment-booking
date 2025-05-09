@@ -1,21 +1,28 @@
-import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
+import { useNavigate } from 'react-router-dom'
 
-const TopDoctors = () => {
+const RelatedDoctors = ({ docId, speciality }) => {
+    const { doctors } = useContext(AppContext)
     const navigate = useNavigate()
-    const {doctors}=useContext(AppContext)
+    const [relDoc, setRelDoc] = useState([])
+    useEffect(() => {
+        if (doctors.length > 0 && speciality) {
+            const doctorsData = doctors.filter((doc) => doc.speciality === speciality && doc._id !== docId) //check doc speciality to actual open specilaty to show releted doctors
+            setRelDoc(doctorsData)
+        }
+    }, [doctors, docId, speciality])
     return (
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
             <div className="text-center mb-12 flex flex-col justify-center items-center gap-3">
-                <h1 className=' text-3xl font-medium'>Top Doctors to Book</h1>
+                <h1 className=' text-3xl font-medium'>Related Doctors to Book</h1>
                 <p className='sm:w-1/3 text-center text-sm'>
                     Simply browse through our extensive list of trusted doctors.
                 </p>
             </div>
 
             <div className="grid grid-cols-auto gap-6 pt-5 gap-y-6 px-3 sm:px-3">
-                {doctors.slice(0, 10).map((item, index) => (
+                {relDoc.slice(0, 5).map((item, index) => (
                     <div
                         key={index}
                         className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg hover:translate-y-[-10px] transition-all duration-500 cursor-pointer"
@@ -56,7 +63,7 @@ const TopDoctors = () => {
             </div>
 
             <div className="text-center mt-12">
-                <button className="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 shadow-sm" onClick={()=>{navigate("/doctors");scrollTO(0,0)}}>
+                <button className="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 shadow-sm" onClick={() => { navigate("/doctors"); scrollTO(0, 0) }}>
                     View More Doctors
                 </button>
             </div>
@@ -64,4 +71,4 @@ const TopDoctors = () => {
     )
 }
 
-export default TopDoctors
+export default RelatedDoctors
