@@ -42,5 +42,45 @@ const registerUser = async (req, res) => {
     res
       .status(201)
       .json({ success: true, message: "User created successfully", token });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: `Internal Server Error: ${error.message}`,
+    });
+  }
 };
+
+// API endpoint to login user
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    // comparing password with hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET); // generating token
+      res
+        .status(200)
+        .json({ success: true, message: "User logged in successfully", token });
+    } else {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid password" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: `Internal Server Error: ${error.message}`,
+    });
+  }
+};
+
+export { registerUser };
