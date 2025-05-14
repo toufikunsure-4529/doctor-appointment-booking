@@ -2,6 +2,8 @@ import express from "express";
 import {
   addDoctor,
   allDoctors,
+  appointmentAdmin,
+  appointmentCancel,
   loginAdmin,
 } from "../controllers/adminController.js";
 import upload from "../middlewares/multer.js";
@@ -14,5 +16,7 @@ adminRouter.post("/add-doctor", authAdmin, upload.single("image"), addDoctor); /
 adminRouter.post("/login", loginAdmin);
 adminRouter.post("/all-doctors", authAdmin, allDoctors); // authAdmin middlewares to check if the user is admin
 adminRouter.post("/change-availablity", authAdmin, changeAvailablity);
+adminRouter.get("/appointments", authAdmin, appointmentAdmin);
+adminRouter.post("/cancel-appointment", authAdmin, appointmentCancel);
 
 export default adminRouter;

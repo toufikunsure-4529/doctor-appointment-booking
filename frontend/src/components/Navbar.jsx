@@ -1,13 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets_frontend/assets";
+import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-  const [token, setToken] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { token, setToken, userData } = useContext(AppContext)
 
   const navLinks = [
     { name: "Home", to: "/" },
@@ -27,7 +28,8 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    setToken(false);
+    setToken('');
+    localStorage.removeItem(token)
     setDropdownOpen(false);
     setMobileMenuOpen(false);
   };
@@ -63,7 +65,7 @@ const Navbar = () => {
 
         {/* Profile / Auth */}
         <div className="flex items-center gap-4 relative" ref={dropdownRef}>
-          {token ? (
+          {token && userData ? (
             <button
               className="flex items-center gap-2 focus:outline-none"
               onClick={() => setDropdownOpen((prev) => !prev)}
@@ -71,7 +73,7 @@ const Navbar = () => {
               aria-expanded={dropdownOpen}
             >
               <img
-                src={assets.profile_pic}
+                src={ userData.image}
                 alt="User Profile"
                 className="w-8 h-8 rounded-full object-cover"
               />
@@ -137,9 +139,8 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 bg-white z-50 transform transition-transform duration-300 ease-in-out ${
-          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        } md:hidden`}
+        className={`fixed inset-0 bg-white z-50 transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          } md:hidden`}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <div className="cursor-pointer" onClick={() => navigate("/")}>
