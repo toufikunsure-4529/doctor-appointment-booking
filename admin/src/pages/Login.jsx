@@ -3,12 +3,14 @@ import { AtSymbolIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { AdminContext } from '../context/AdminContext';
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { DoctorContext } from '../context/DoctorContext';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({ email: '', password: '' });
     const [state, setState] = useState('Admin');
     const { setAtoken, backendUrl } = useContext(AdminContext)
+    const { setDToken } = useContext(DoctorContext)
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,9 +48,20 @@ const Login = () => {
                     localStorage.setItem('aToken', data.token);
                     setAtoken(data.token)
                     toast.success('Login Successfully')
+                } else {
+                    toast.error('Invalid Credentials')
                 }
-            } else {
 
+            } else {
+                const { data } = await axios.post(backendUrl + '/api/doctor/login', formData)
+                if (data.success) {
+                    localStorage.setItem('dToken', data.token);
+                    setDToken(data.token)
+                    toast.success('Doctor Login Successfully')
+                    console.log(data.token)
+                } else {
+                    toast.error('Invalid Credentials')
+                }
             }
         } catch (error) {
             console.log(error);

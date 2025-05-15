@@ -186,9 +186,11 @@ const adminDashboard = async (req, res) => {
 
     const dashData = {
       doctors: doctors.length,
-      users: users.length,
-      appointments:appointments.length
+      patients: users.length,
+      appointments: appointments.length,
+      latestAppointments: appointments.reverse().slice(0, 5), // reverse to show latest first
     };
+    res.status(200).json({ success: true, dashData });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -204,4 +206,5 @@ export {
   allDoctors,
   appointmentAdmin,
   appointmentCancel,
+  adminDashboard,
 };

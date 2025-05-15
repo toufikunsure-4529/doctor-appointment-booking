@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addDoctor,
+  adminDashboard,
   allDoctors,
   appointmentAdmin,
   appointmentCancel,
@@ -18,5 +19,6 @@ adminRouter.post("/all-doctors", authAdmin, allDoctors); // authAdmin middleware
 adminRouter.post("/change-availablity", authAdmin, changeAvailablity);
 adminRouter.get("/appointments", authAdmin, appointmentAdmin);
 adminRouter.post("/cancel-appointment", authAdmin, appointmentCancel);
+adminRouter.get("/dashboard", authAdmin, adminDashboard);
 
 export default adminRouter;

@@ -73,7 +73,7 @@ const Navbar = () => {
               aria-expanded={dropdownOpen}
             >
               <img
-                src={ userData.image}
+                src={userData.image}
                 alt="User Profile"
                 className="w-8 h-8 rounded-full object-cover"
               />

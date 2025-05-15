@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { AdminContext } from '../../context/AdminContext'
-import { AppContext } from '../../context/AppContect'
+import { AppContext } from '../../context/AppContext'
 
 const AllAppointments = () => {
   const { getAllAppointments, appointments, aToken, cancelAppointment } = useContext(AdminContext)
